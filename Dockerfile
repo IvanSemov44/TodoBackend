@@ -1,22 +1,23 @@
 # syntax=docker/dockerfile:1
 
-# Set the .NET version from the csproj, fallback to 9.0 if not found
 ARG DOTNET_VERSION=9.0
 
 # --- Build Stage ---
 FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} AS builder
 WORKDIR /src
 
-# Copy csproj and restore as distinct layers
-COPY --link TodoBackend.csproj ./
+# Copy the solution file and restore dependencies
+COPY --link TodoBackend.sln ./
+COPY --link TodoBackend/TodoBackend.csproj ./TodoBackend/
 RUN --mount=type=cache,target=/root/.nuget/packages \
     --mount=type=cache,target=/root/.cache/msbuild \
     dotnet restore
 
 # Copy the rest of the source code
-COPY --link . .
+COPY --link TodoBackend ./TodoBackend/
 
 # Publish the application
+WORKDIR /src/TodoBackend
 RUN --mount=type=cache,target=/root/.nuget/packages \
     --mount=type=cache,target=/root/.cache/msbuild \
     dotnet publish -c Release -o /app/publish --no-restore
