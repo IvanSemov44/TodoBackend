@@ -1,0 +1,40 @@
+services:
+  - type: web
+    name: todo-backend-docker
+    env: docker
+    plan: free
+    docker:
+      dockerfile: Dockerfile
+      dockerContext: .
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: DB_HOST
+        fromDatabase:
+          name: todo-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: todo-db
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: todo-db
+          property: database
+      - key: DB_USER
+        fromDatabase:
+          name: todo-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: todo-db
+          property: password
+    healthCheckPath: /health
+    autoDeploy: true
+
+databases:
+  - name: todo-db
+    plan: free
+    databaseName: todoapp
+    user: todoapp_user
+    ipAllowList: []

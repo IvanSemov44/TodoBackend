@@ -1,0 +1,67 @@
+# .dockerignore for C#/.NET project
+
+# 1. Version control
+.git/
+.gitignore
+.hg/
+.svn/
+
+# 2. Build outputs
+bin/
+obj/
+dist/
+build/
+out/
+
+# 3. IDE/editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+*.user
+
+# 4. Temporary and development files
+tmp/
+temp/
+*.tmp
+*.log
+*.bak
+*.cache
+
+# 5. Test and debug artifacts
+test/
+tests/
+debug/
+
+# 6. Environment and secrets
+.env*
+*.env
+*.pem
+*.key
+*.crt
+config.local.*
+*.local.yml
+
+# 7. Documentation and markdown
+README*
+*.md
+docs/
+
+# 8. Docker and compose files
+Dockerfile*
+docker-compose*
+
+# 9. Project-specific
+*.http
+
+# 10. Miscellaneous
+local/
+.local/
+
+# Exclude migration snapshots if not needed in build (optional)
+# Migrations/*.Designer.cs
+
+# Exclude all files with no extension (optional, uncomment if desired)
+# *.
+
+# End of .dockerignore

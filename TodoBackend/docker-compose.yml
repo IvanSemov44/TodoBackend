@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  todo-backend:
+    build:
+      context: .
+      target: final
+    ports:
+      - "5000:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Host=postgres;Database=todoapp;Username=postgres;Password=kakebrat3
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - todo-network
+
+  postgres:
+    image: postgres:18
+    restart: always
+    environment:
+      - POSTGRES_DB=todoapp
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=kakebrat3
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - todo-network
+
+volumes:
+  postgres_data:
+
+networks:
+  todo-network:
+    driver: bridge
