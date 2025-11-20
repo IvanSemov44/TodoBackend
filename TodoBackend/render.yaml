@@ -30,11 +30,9 @@ services:
           name: todo-db
           property: password
     healthCheckPath: /health
-    autoDeploy: true
 
 databases:
   - name: todo-db
     plan: free
     databaseName: todoapp
     user: todoapp_user
-    ipAllowList: []

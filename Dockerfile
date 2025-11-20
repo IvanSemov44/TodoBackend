@@ -7,20 +7,16 @@ FROM mcr.microsoft.com/dotnet/sdk:${DOTNET_VERSION} AS builder
 WORKDIR /src
 
 # Copy the solution file and restore dependencies
-COPY --link TodoBackend.sln ./
-COPY --link TodoBackend/TodoBackend.csproj ./TodoBackend/
-RUN --mount=type=cache,target=/root/.nuget/packages \
-    --mount=type=cache,target=/root/.cache/msbuild \
-    dotnet restore
+COPY  TodoBackend.sln ./
+COPY TodoBackend/TodoBackend.csproj ./TodoBackend/
+RUN  dotnet restore
 
 # Copy the rest of the source code
-COPY --link TodoBackend ./TodoBackend/
+COPY TodoBackend ./TodoBackend/
 
 # Publish the application
 WORKDIR /src/TodoBackend
-RUN --mount=type=cache,target=/root/.nuget/packages \
-    --mount=type=cache,target=/root/.cache/msbuild \
-    dotnet publish -c Release -o /app/publish --no-restore
+RUN dotnet publish -c Release -o /app/publish --no-restore
 
 # --- Runtime Stage ---
 FROM mcr.microsoft.com/dotnet/aspnet:${DOTNET_VERSION} AS final
